@@ -137,5 +137,21 @@ namespace StudentAppTest
             Assert.True(student >= student);
             Assert.True(student <= student);
         }
+
+        [Test]
+        public void StudentShouldBeGreaterThanNull()
+        {
+            var student = new Student("AAA", "lname", "mname", 1998);
+
+            Assert.True(student > null);
+            Assert.True(student >= null);
+            Assert.False(null > student);
+            Assert.False(null >= student);
+            
+            Assert.True(null < student);
+            Assert.True(null <= student);
+            Assert.False(student < null);
+            Assert.False(student <= null);
+        }
     }
 }
