@@ -7,13 +7,13 @@ namespace StudentApp
         public string FirstName { get; }
         public string LastName { get; }
         public string MiddleName { get; }
-        public int BirthYear { get; }
-        public int AvgScore { get; set; }
+        public ushort BirthYear { get; }
+        public double AvgScore { get; set; }
 
         public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
 
-        public Student(string firstName, string lastName, string middleName, int birthYear, int avgScore = 0)
+        public Student(string firstName, string lastName, string middleName, ushort birthYear, double avgScore = 0)
         {
             FirstName = firstName;
             LastName = lastName;
