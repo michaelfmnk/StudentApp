@@ -42,59 +42,32 @@ namespace StudentApp
 
         public static bool operator ==(Student a, Student b)
         {
-            if (ReferenceEquals(null, a) || ReferenceEquals(null, b))
-            {
-                return ReferenceEquals(null, a) && ReferenceEquals(null, b);
-            }
-            
-            return string.CompareOrdinal(a.FullName, b.FullName) == 0;
+            return string.CompareOrdinal(a?.FullName, b?.FullName) == 0;
         }
 
         public static bool operator !=(Student a, Student b)
         {
-            if (ReferenceEquals(null, a) || ReferenceEquals(null, b))
-            {
-                return ReferenceEquals(null, a) != ReferenceEquals(null, b);
-            }
-            
-            return string.CompareOrdinal(a.FullName, b.FullName) != 0;
+            return string.CompareOrdinal(a?.FullName, b?.FullName) != 0;
         }
 
         public static bool operator >=(Student a, Student b)
         {
-            if (a == null) return b == null;
-            if (b == null) return true;
-            
-            return string.CompareOrdinal(a.FullName, b.FullName) <= 0;
+            return string.CompareOrdinal(a?.FullName, b?.FullName) <= 0;
         }
 
         public static bool operator <=(Student a, Student b)
         {
-            if (b == null) return a == null;
-            if (a == null) return true;
-            
-            return string.CompareOrdinal(a.FullName, b.FullName) >= 0;
+            return string.CompareOrdinal(a?.FullName, b?.FullName) >= 0;
         }
 
         public static bool operator >(Student a, Student b)
         {
-            if (a == null) return false;
-            if (b == null) return true;
-            
-            return string.CompareOrdinal(a.FullName, b.FullName) < 0;
+            return string.CompareOrdinal(a?.FullName, b?.FullName) < 0;
         }
 
         public static bool operator <(Student a, Student b)
         {
-            if (b == null) return false;
-            if (a == null) return true;
-            
-            return string.CompareOrdinal(a.FullName, b.FullName) > 0;
-        }
-
-        public void PrintInfo()
-        {
-            Console.WriteLine(ToString());
+            return string.CompareOrdinal(a?.FullName, b?.FullName) > 0;
         }
 
         public override string ToString()

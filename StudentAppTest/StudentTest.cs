@@ -140,20 +140,35 @@ namespace StudentAppTest
         }
 
         [Test]
-        public void StudentShouldBeGreaterThanNull()
+        public void NullShouldBeGreaterThanObj()
         {
             var student = new Student("AAA", "lname", "mname", 1998);
 
-            Console.WriteLine(student);
-            Assert.True(student > null);
+            Assert.False(student > null);
+            Assert.False(student >= null);
+            Assert.True(null > student);
+            Assert.True(null >= student);
+            
+            Assert.False(null < student);
+            Assert.False(null <= student);
+            Assert.True(student < null);
+            Assert.True(student <= null);
+        }
+        
+        [Test]
+        public void ShouldCompareNullToNull()
+        {
+            Student student = null;
+
+            Assert.False(student > null);
             Assert.True(student >= null);
             Assert.False(null > student);
-            Assert.False(null >= student);
+            Assert.True(null >= student);
             
-            Assert.True(null < student);
+            Assert.False(null < student);
             Assert.True(null <= student);
             Assert.False(student < null);
-            Assert.False(student <= null);
+            Assert.True(student <= null);
         }
     }
 }
