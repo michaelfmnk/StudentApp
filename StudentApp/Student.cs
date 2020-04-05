@@ -47,12 +47,17 @@ namespace StudentApp
                 return ReferenceEquals(null, a) && ReferenceEquals(null, b);
             }
             
-            return a.FirstName == b.FirstName && a.LastName == b.LastName && a.MiddleName == b.MiddleName;
+            return string.CompareOrdinal(a.FullName, b.FullName) == 0;
         }
 
         public static bool operator !=(Student a, Student b)
         {
-            return !(a == b);
+            if (ReferenceEquals(null, a) || ReferenceEquals(null, b))
+            {
+                return ReferenceEquals(null, a) != ReferenceEquals(null, b);
+            }
+            
+            return string.CompareOrdinal(a.FullName, b.FullName) != 0;
         }
 
         public static bool operator >=(Student a, Student b)

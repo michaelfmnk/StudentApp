@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using StudentApp;
 
@@ -143,6 +144,7 @@ namespace StudentAppTest
         {
             var student = new Student("AAA", "lname", "mname", 1998);
 
+            Console.WriteLine(student);
             Assert.True(student > null);
             Assert.True(student >= null);
             Assert.False(null > student);
