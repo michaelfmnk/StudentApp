@@ -29,6 +29,7 @@ namespace StudentApp
 
         private bool Equals(Student student)
         {
+            if (ReferenceEquals(student, null)) return false;
             return FirstName == student.FirstName && LastName == student.LastName && MiddleName == student.MiddleName;
         }
 
