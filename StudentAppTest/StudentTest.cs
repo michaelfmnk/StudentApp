@@ -162,5 +162,33 @@ namespace StudentAppTest
             Assert.False(student < null);
             Assert.True(student <= null);
         }
+
+        [Test]
+        public void ShouldCompareUserToUser()
+        {
+            var studentA = new Student("fname", "Aname", "mname", 1999);
+            var studentB = new Student("fname", "Bname", "mname", 1999);
+
+            Assert.AreEqual(-1, studentA.CompareTo(studentB));
+            Assert.AreEqual(0, studentA.CompareTo(studentA));
+            Assert.AreEqual(1, studentB.CompareTo(studentA));
+        }
+        
+
+        [Test]
+        public void StudentShouldBeCloned()
+        {
+            var student = new Student("fname", "lname", "mname", 1999);
+
+            var clone = student.Clone();
+            Assert.True(clone is Student);
+
+            var studentClone = (Student) clone;
+            Assert.AreEqual("fname", studentClone.FirstName);
+            Assert.AreEqual("lname", studentClone.LastName);
+            Assert.AreEqual("mname", studentClone.MiddleName);
+            Assert.AreEqual(1999, studentClone.BirthYear);
+            Assert.AreEqual(0, studentClone.AvgScore);
+        }
     }
 }
