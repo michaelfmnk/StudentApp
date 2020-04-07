@@ -81,10 +81,7 @@ namespace StudentApp
             if (compare != 0) return compare;
 
             compare = string.CompareOrdinal(a.MiddleName, b.MiddleName);
-            if (compare != 0)
-            {
-                return compare;
-            }
+            if (compare != 0) return compare;
 
             return string.CompareOrdinal(a.LastName, b.LastName);
         }
