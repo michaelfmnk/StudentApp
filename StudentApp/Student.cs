@@ -27,7 +27,7 @@ namespace StudentApp
             return Equals((Student) obj);
         }
 
-        public bool Equals(Student student)
+        private bool Equals(Student student)
         {
             return FirstName == student.FirstName && LastName == student.LastName && MiddleName == student.MiddleName;
         }
