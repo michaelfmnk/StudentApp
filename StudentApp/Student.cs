@@ -2,7 +2,7 @@ using System;
 
 namespace StudentApp
 {
-    public class Student : IComparable<Student>
+    public class Student : IComparable<Student>, ICloneable
     {
         public string FirstName { get; }
         public string LastName { get; }
@@ -91,6 +91,11 @@ namespace StudentApp
             return $"Student {FirstName} {MiddleName} {LastName}. " +
                    $"Year oof birth: {BirthYear}. " +
                    $"Average score: {AvgScore}";
+        }
+
+        public object Clone()
+        {
+            return new Student(FirstName, LastName, MiddleName, BirthYear, AvgScore);
         }
     }
 }
