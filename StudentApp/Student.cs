@@ -31,9 +31,9 @@ namespace StudentApp
         {
             int PRIME = 59;
             int result = 1;
-            result = (result * PRIME) + (FirstName?.GetHashCode() ?? 43);
-            result = (result * PRIME) + (LastName?.GetHashCode() ?? 43);
-            result = (result * PRIME) + (MiddleName?.GetHashCode() ?? 43);
+            result = (result * PRIME) + (FirstName == null ? 43 : FirstName.GetHashCode());
+            result = (result * PRIME) + (LastName == null ? 43 : LastName.GetHashCode());
+            result = (result * PRIME) + (MiddleName == null ? 43 : MiddleName.GetHashCode());
             return result;
         }
 
