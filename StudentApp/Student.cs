@@ -2,16 +2,13 @@ using System;
 
 namespace StudentApp
 {
-    public class Student
+    public class Student : IComparable<Student>
     {
         public string FirstName { get; }
         public string LastName { get; }
         public string MiddleName { get; }
         public ushort BirthYear { get; }
         public double AvgScore { get; set; }
-
-        public string FullName => $"{FirstName} {MiddleName} {LastName}";
-
 
         public Student(string firstName, string lastName, string middleName, ushort birthYear, double avgScore = 0)
         {
@@ -21,53 +18,75 @@ namespace StudentApp
             BirthYear = birthYear;
             AvgScore = avgScore;
         }
-
-        private bool Equals(Student other)
-        {
-            return FirstName == other.FirstName && LastName == other.LastName && MiddleName == other.MiddleName && BirthYear == other.BirthYear;
-        }
-
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Student) obj);
+            return Compare(this, (Student) obj) == 0;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(FirstName, LastName, MiddleName, BirthYear);
+            int PRIME = 59;
+            int result = 1;
+            result = (result * PRIME) + (FirstName?.GetHashCode() ?? 43);
+            result = (result * PRIME) + (LastName?.GetHashCode() ?? 43);
+            result = (result * PRIME) + (MiddleName?.GetHashCode() ?? 43);
+            return result;
         }
 
         public static bool operator ==(Student a, Student b)
         {
-            return string.CompareOrdinal(a?.FullName, b?.FullName) == 0;
+            return Compare(a, b) == 0;
         }
 
         public static bool operator !=(Student a, Student b)
         {
-            return string.CompareOrdinal(a?.FullName, b?.FullName) != 0;
+            return Compare(a, b) != 0;
         }
 
         public static bool operator >=(Student a, Student b)
         {
-            return string.CompareOrdinal(a?.FullName, b?.FullName) <= 0;
+            return Compare(a, b) <= 0;
         }
 
         public static bool operator <=(Student a, Student b)
         {
-            return string.CompareOrdinal(a?.FullName, b?.FullName) >= 0;
+            return Compare(a, b) >= 0;
         }
 
         public static bool operator >(Student a, Student b)
         {
-            return string.CompareOrdinal(a?.FullName, b?.FullName) < 0;
+            return Compare(a, b) < 0;
         }
 
         public static bool operator <(Student a, Student b)
         {
-            return string.CompareOrdinal(a?.FullName, b?.FullName) > 0;
+            return Compare(a, b) > 0;
+        }
+        
+        public int CompareTo(Student other)
+        {
+            return Compare(this, other);
+        }
+
+        private static int Compare(Student a, Student b)
+        {
+            if (ReferenceEquals(a, null)) return ReferenceEquals(b, null) ? 0 : -1;
+            if (ReferenceEquals(b, null)) return 1;
+            
+            var compare = string.CompareOrdinal(a.FirstName, b.FirstName);
+            if (compare != 0) return compare;
+
+            compare = string.CompareOrdinal(a.MiddleName, b.MiddleName);
+            if (compare != 0)
+            {
+                return compare;
+            }
+
+            return string.CompareOrdinal(a.LastName, b.LastName);
         }
 
         public override string ToString()

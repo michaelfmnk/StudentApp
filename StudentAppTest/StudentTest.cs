@@ -28,14 +28,6 @@ namespace StudentAppTest
             
             Assert.AreEqual(8, student.AvgScore);
         }
-
-
-        [Test]
-        public void ShouldGetFullName()
-        {
-            var student = new Student("fname", "lname", "mname", 1999);
-            Assert.AreEqual("fname mname lname", student.FullName);
-        }
         
         [Test]
         public void ShouldGetStringInfo()
