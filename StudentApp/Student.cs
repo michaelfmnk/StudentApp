@@ -24,7 +24,12 @@ namespace StudentApp
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Compare(this, (Student) obj) == 0;
+            return Equals((Student) obj);
+        }
+
+        public bool Equals(Student student)
+        {
+            return FirstName == student.FirstName && LastName == student.LastName && MiddleName == student.MiddleName;
         }
 
         public override int GetHashCode()
