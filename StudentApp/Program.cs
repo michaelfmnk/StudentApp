@@ -2,13 +2,13 @@
 
 namespace StudentApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var a = new Student("a", "b", "c", 1000);
             var b = new Student("a", "b", "c", 1000);
-            var res= a != b;
+            var res = a != b;
             Console.WriteLine(res);
         }
     }
