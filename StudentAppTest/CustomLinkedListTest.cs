@@ -370,5 +370,38 @@ namespace StudentAppTest
             enumerator.MoveNext();
             Assert.True(ReferenceEquals(student3, enumerator.Current));
         }
+
+
+        [Test]
+        public void ShouldSort()
+        {
+            // given
+            var linkedList = new CustomLinkedList<Student>();
+
+            for (char letter = 'Z'; letter >= 'A'; letter--)
+            {
+                linkedList.PushToEnd(StudentWithFirstName(letter.ToString())); 
+            } 
+            
+
+            // when
+            linkedList.Sort();
+
+            // then
+            Assert.AreEqual("Z", linkedList.Current.FirstName);
+
+            linkedList.MoveToHead();
+            
+            for (char letter = 'A'; letter <= 'Z'; letter++)
+            {
+                Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
+                linkedList++;
+            }
+        }
+
+        private Student StudentWithFirstName(string fName)
+        {
+            return new Student(fName, "L", "N", 1999);
+        }
     }
 }

@@ -55,10 +55,35 @@ namespace StudentApp.List
             }
         }
 
+        public void Sort()
+        {
+            var aNode = Head;
+            for (var i = 0; i < Size; i++)
+            {
+                var bNode = Tail;
+                for (var j = 0; j < Size - i; j++)
+                {
+                    if (aNode.Data.CompareTo(bNode.Data) > 0)
+                    {
+                        var tmp = aNode.Data;
+                        aNode.Data = bNode.Data;
+                        bNode.Data = tmp;
+
+                        if (ReferenceEquals(CurrentNode, aNode)) CurrentNode = bNode;
+
+                        if (ReferenceEquals(CurrentNode, bNode)) CurrentNode = bNode;
+                    }
+
+                    bNode = bNode.PrevNode;
+                }
+
+                aNode = aNode.NextNode;
+            }
+        }
+
         public void DeleteCurrent()
         {
             if (ReferenceEquals(CurrentNode, null)) return;
-
             DeleteNode(CurrentNode);
         }
 
@@ -175,7 +200,7 @@ namespace StudentApp.List
             else
             {
                 node = Tail;
-                for (var i = Size - 1; i < Size - index; i++) node = node.PrevNode;
+                for (var i = 0; i < Size - 1 - index; i++) node = node.PrevNode;
             }
 
             return node;
@@ -239,7 +264,7 @@ namespace StudentApp.List
                 Data = data;
             }
 
-            public TR Data { get; }
+            public TR Data { get; protected internal set; }
 
             protected internal ListNode<TR> NextNode { get; set; }
             protected internal ListNode<TR> PrevNode { get; set; }
