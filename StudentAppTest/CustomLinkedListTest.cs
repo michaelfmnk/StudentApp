@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using StudentApp;
 using StudentApp.List;
@@ -344,7 +343,7 @@ namespace StudentAppTest
             Assert.AreEqual(1, linkedList.Size);
             Assert.AreEqual("4", linkedList.Current.FirstName);
         }
-        
+
         [Test]
         public void EnumeratorShouldWork()
         {
@@ -378,11 +377,9 @@ namespace StudentAppTest
             // given
             var linkedList = new CustomLinkedList<Student>();
 
-            for (char letter = 'Z'; letter >= 'A'; letter--)
-            {
-                linkedList.PushToEnd(StudentWithFirstName(letter.ToString())); 
-            } 
-            
+            for (var letter = 'Z'; letter >= 'A'; letter--)
+                linkedList.PushToEnd(StudentWithFirstName(letter.ToString()));
+
 
             // when
             linkedList.Sort();
@@ -391,8 +388,8 @@ namespace StudentAppTest
             Assert.AreEqual("Z", linkedList.Current.FirstName);
 
             linkedList.MoveToHead();
-            
-            for (char letter = 'A'; letter <= 'Z'; letter++)
+
+            for (var letter = 'A'; letter <= 'Z'; letter++)
             {
                 Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
                 linkedList++;
@@ -401,7 +398,65 @@ namespace StudentAppTest
 
         private Student StudentWithFirstName(string fName)
         {
-            return new Student(fName, "L", "N", 1999);
+            return new Student(fName, "", "", 0);
+        }
+
+        [Test]
+        public void ShouldSortCurrentDrowning()
+        {
+            // given
+            var linkedList = new CustomLinkedList<Student>();
+
+            for (var letter = 'A'; letter <= 'Z'; letter++)
+            {
+                if (letter == 'H') continue;
+                linkedList.PushToEnd(StudentWithFirstName(letter.ToString()));
+            }
+
+            // when
+            linkedList.PushToEnd(StudentWithFirstName("H"));
+            linkedList.MoveToTail();
+            linkedList.SortCurrent();
+
+            // then
+            linkedList.MoveToHead();
+
+
+            Console.WriteLine(linkedList);
+            for (var letter = 'A'; letter <= 'Z'; letter++)
+            {
+                Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
+                linkedList++;
+            }
+        }
+
+        [Test]
+        public void ShouldSortCurrentRaising()
+        {
+            // given
+            var linkedList = new CustomLinkedList<Student>();
+
+            for (var letter = 'A'; letter <= 'Z'; letter++)
+            {
+                if (letter == 'H') continue;
+                linkedList.PushToEnd(StudentWithFirstName(letter.ToString()));
+            }
+
+            // when
+            linkedList.PushToStart(StudentWithFirstName("H"));
+            linkedList.MoveToHead();
+            linkedList.SortCurrent();
+
+            // then
+            linkedList.MoveToHead();
+
+
+            Console.WriteLine(linkedList);
+            for (var letter = 'A'; letter <= 'Z'; letter++)
+            {
+                Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
+                linkedList++;
+            }
         }
     }
 }

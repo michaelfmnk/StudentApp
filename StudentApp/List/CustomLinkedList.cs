@@ -63,22 +63,24 @@ namespace StudentApp.List
                 var bNode = Tail;
                 for (var j = 0; j < Size - i; j++)
                 {
-                    if (aNode.Data.CompareTo(bNode.Data) > 0)
-                    {
-                        var tmp = aNode.Data;
-                        aNode.Data = bNode.Data;
-                        bNode.Data = tmp;
-
-                        if (ReferenceEquals(CurrentNode, aNode)) CurrentNode = bNode;
-
-                        if (ReferenceEquals(CurrentNode, bNode)) CurrentNode = bNode;
-                    }
+                    if (aNode.Data.CompareTo(bNode.Data) > 0) SwapNodes(aNode, bNode);
 
                     bNode = bNode.PrevNode;
                 }
 
                 aNode = aNode.NextNode;
             }
+        }
+
+        private void SwapNodes(ListNode<T> aNode, ListNode<T> bNode)
+        {
+            var tmp = aNode.Data;
+            aNode.Data = bNode.Data;
+            bNode.Data = tmp;
+
+            if (ReferenceEquals(CurrentNode, aNode)) CurrentNode = bNode;
+
+            if (ReferenceEquals(CurrentNode, bNode)) CurrentNode = bNode;
         }
 
         public void DeleteCurrent()
@@ -254,6 +256,21 @@ namespace StudentApp.List
                 if (Equals(node.Data, data)) DeleteNode(node);
 
                 node = node.NextNode;
+            }
+        }
+
+        public void SortCurrent()
+        {
+            if (!ReferenceEquals(CurrentNode, Head) && CurrentNode.Data.CompareTo(CurrentNode.PrevNode.Data) < 0)
+            {
+                SwapNodes(CurrentNode, CurrentNode.PrevNode);
+                SortCurrent();
+            }
+
+            if (!ReferenceEquals(CurrentNode, Tail) && CurrentNode.Data.CompareTo(CurrentNode.NextNode.Data) > 0)
+            {
+                SwapNodes(CurrentNode, CurrentNode.NextNode);
+                SortCurrent();
             }
         }
 

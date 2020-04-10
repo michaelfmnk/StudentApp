@@ -6,7 +6,6 @@ namespace StudentAppTest
 {
     public class NamedCustomLinkedListTest
     {
-
         [Test]
         public void NamedCustomLinkedListShouldHaveName()
         {
@@ -14,7 +13,7 @@ namespace StudentAppTest
 
             Assert.AreEqual("Custom Name", namedList.Name);
         }
-        
+
         [Test]
         public void CloningShouldWork()
         {
@@ -27,17 +26,16 @@ namespace StudentAppTest
             var student3 = new Student("F3", "L", "N", 1999);
             namedList.AddAll(student1, student2, student3);
             namedList.MoveToTail();
-            
+
             // when
             var clone = (NamedCustomLinkedList<Student>) namedList.Clone();
-            
-            
+
+
             // then
             Assert.AreEqual("Name", clone.Name);
             Assert.AreEqual(3, clone.Size);
             Assert.AreEqual("F3", clone.Current.FirstName);
             Assert.False(ReferenceEquals(student3, clone.Current));
         }
-
     }
 }
