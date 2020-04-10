@@ -1,33 +1,58 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
-namespace StudentApp.list
+namespace StudentApp.List
 {
-    public class LinkedList<T> : ICloneable where T : IComparable<T>, ICloneable
+    public class CustomLinkedList<T> : ICloneable, IEnumerable<T>
+        where T : IComparable<T>, ICloneable
     {
         protected ListNode<T> CurrentNode;
         protected ListNode<T> Head;
         protected ListNode<T> Tail;
+
+        public CustomLinkedList()
+        {
+        }
+
+        public CustomLinkedList(CustomLinkedList<T> source)
+        {
+            var node = source.Head;
+
+            for (var i = 0; i < source.Size; i++)
+            {
+                var clonedData = (T) node.Data.Clone();
+                PushToEnd(clonedData);
+
+                if (ReferenceEquals(node, source.CurrentNode)) MoveToTail();
+
+                node = node.NextNode;
+            }
+        }
+
         public int Size { get; protected set; }
 
         public T Current => ReferenceEquals(null, CurrentNode) ? default : CurrentNode.Data;
 
-        public object Clone()
+        public virtual object Clone()
         {
-            var clonedList = new LinkedList<T>();
+            return new CustomLinkedList<T>(this);
+        }
 
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return (IEnumerator<T>) GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
             var node = Head;
             for (var i = 0; i < Size; i++)
             {
-                var clonedData = (T) node.Data.Clone();
-                clonedList.PushToEnd(clonedData);
-
-                if (ReferenceEquals(node, CurrentNode)) clonedList.MoveToTail();
-
+                yield return node.Data;
                 node = node.NextNode;
             }
-
-            return clonedList;
         }
 
         public void DeleteCurrent()
@@ -59,19 +84,19 @@ namespace StudentApp.list
             CurrentNode = Tail;
         }
 
-        public static LinkedList<T> operator ++(LinkedList<T> list)
+        public static CustomLinkedList<T> operator ++(CustomLinkedList<T> list)
         {
             list.CurrentNode = list.CurrentNode.NextNode;
             return list;
         }
 
-        public static LinkedList<T> operator --(LinkedList<T> list)
+        public static CustomLinkedList<T> operator --(CustomLinkedList<T> list)
         {
             list.CurrentNode = list.CurrentNode.PrevNode;
             return list;
         }
 
-        public static bool operator !(LinkedList<T> list)
+        public static bool operator !(CustomLinkedList<T> list)
         {
             return list.Size != 0;
         }
@@ -93,6 +118,11 @@ namespace StudentApp.list
 
             Tail = node;
             Size += 1;
+        }
+
+        public void AddAll(params T[] data)
+        {
+            foreach (var datum in data) PushToEnd(datum);
         }
 
         public void PushToStart(T data)
@@ -155,14 +185,10 @@ namespace StudentApp.list
         {
             var strBuilder = new StringBuilder();
 
-            var curr = Head;
-
-            for (var i = 0; i < Size; i++)
+            foreach (var data in this)
             {
-                strBuilder.Append(curr);
+                strBuilder.Append(data);
                 strBuilder.Append("->");
-
-                curr = curr.NextNode;
             }
 
             return strBuilder.ToString();
@@ -190,7 +216,7 @@ namespace StudentApp.list
 
             Size += 1;
 
-            if (index == 0) {Head = node;}
+            if (index == 0) Head = node;
             if (index == Size) Tail = node;
         }
 
@@ -205,25 +231,23 @@ namespace StudentApp.list
                 node = node.NextNode;
             }
         }
-        
+
         protected internal sealed class ListNode<TR>
         {
+            public ListNode(TR data)
+            {
+                Data = data;
+            }
+
             public TR Data { get; }
 
             protected internal ListNode<TR> NextNode { get; set; }
             protected internal ListNode<TR> PrevNode { get; set; }
 
-            public ListNode(TR data)
-            {
-                Data = data;
-            }
-        
             public override string ToString()
             {
                 return $"[Node with data: {Data}]";
             }
         }
     }
-    
-    
 }

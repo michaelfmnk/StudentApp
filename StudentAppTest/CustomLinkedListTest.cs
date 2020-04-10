@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using StudentApp;
-using StudentApp.list;
+using StudentApp.List;
 
 namespace StudentAppTest
 {
@@ -11,7 +12,7 @@ namespace StudentAppTest
         public void ShouldAddElementToEnd()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
 
             var student1 = new Student("F1", "L", "N", 1999);
@@ -39,7 +40,7 @@ namespace StudentAppTest
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
 
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             // when
             linkedList.PushToStart(student1);
@@ -55,7 +56,7 @@ namespace StudentAppTest
         [Test]
         public void ShouldThrowIndexOutOfBounds()
         {
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             Assert.Throws<IndexOutOfRangeException>(() => { linkedList.Get(0); });
             Assert.Throws<IndexOutOfRangeException>(() => { linkedList.Get(100); });
@@ -66,7 +67,7 @@ namespace StudentAppTest
         public void ShouldPutElementByOrderInside()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -89,7 +90,7 @@ namespace StudentAppTest
         public void ShouldPutElementByOrderInStart()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -114,7 +115,7 @@ namespace StudentAppTest
         ]
         public void ShouldPutElementByOrderInTheEnd()
         {
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -133,7 +134,7 @@ namespace StudentAppTest
         public void ShouldMoveCurrentToHead()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -154,7 +155,7 @@ namespace StudentAppTest
         public void ShouldMoveAheadWithIncOperator()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -176,7 +177,7 @@ namespace StudentAppTest
         public void ShouldMoveBackwardsWithDecOperator()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -198,7 +199,7 @@ namespace StudentAppTest
         public void ShouldMoveCurrentToTail()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -219,7 +220,7 @@ namespace StudentAppTest
         public void ExclamationMarkShouldCheckIfNotEmpty()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -237,7 +238,7 @@ namespace StudentAppTest
         public void ExclamationMarkShouldCheckIfEmpty()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             // when
             var hasElements = !linkedList;
@@ -250,7 +251,7 @@ namespace StudentAppTest
         public void ShouldDeleteAll()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -271,7 +272,7 @@ namespace StudentAppTest
         public void ShouldDeleteCurrent()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -298,7 +299,7 @@ namespace StudentAppTest
         public void ShouldClone()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F2", "L", "N", 1999);
@@ -308,7 +309,7 @@ namespace StudentAppTest
             linkedList.MoveToTail();
 
             // when
-            var clone = (LinkedList<Student>) linkedList.Clone();
+            var clone = (CustomLinkedList<Student>) linkedList.Clone();
 
             // then
             Assert.False(ReferenceEquals(linkedList, clone));
@@ -325,7 +326,7 @@ namespace StudentAppTest
         public void ShouldDeleteByData()
         {
             // given
-            var linkedList = new LinkedList<Student>();
+            var linkedList = new CustomLinkedList<Student>();
 
             var student1 = new Student("F1", "L", "N", 1999);
             var student2 = new Student("F1", "L", "N", 1999);
@@ -342,6 +343,32 @@ namespace StudentAppTest
             // then
             Assert.AreEqual(1, linkedList.Size);
             Assert.AreEqual("4", linkedList.Current.FirstName);
+        }
+        
+        [Test]
+        public void EnumeratorShouldWork()
+        {
+            // given
+            var linkedList = new CustomLinkedList<Student>();
+
+            var student1 = new Student("F1", "L", "N", 1999);
+            var student2 = new Student("F1", "L", "N", 1999);
+            var student3 = new Student("4", "L", "N", 1999);
+            linkedList.PushToEnd(student1);
+            linkedList.PushToEnd(student2);
+            linkedList.PushToEnd(student3);
+
+
+            // when
+            var enumerator = linkedList.GetEnumerator();
+
+
+            enumerator.MoveNext();
+            Assert.True(ReferenceEquals(student1, enumerator.Current));
+            enumerator.MoveNext();
+            Assert.True(ReferenceEquals(student2, enumerator.Current));
+            enumerator.MoveNext();
+            Assert.True(ReferenceEquals(student3, enumerator.Current));
         }
     }
 }
