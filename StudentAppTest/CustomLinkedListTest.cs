@@ -458,5 +458,13 @@ namespace StudentAppTest
                 linkedList++;
             }
         }
+
+        [Test]
+        public void ShouldNotBeAbleToAddNull()
+        {
+            var linkedList = new CustomLinkedList<Student>();
+
+            Assert.Throws<ArgumentNullException>(() => linkedList.PushToEnd(null));
+        }
     }
 }

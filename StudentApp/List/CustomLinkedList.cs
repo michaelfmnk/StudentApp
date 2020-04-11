@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using StudentApp.Common;
 
 namespace StudentApp.List
 {
@@ -130,6 +131,8 @@ namespace StudentApp.List
 
         public void PushToEnd(T data)
         {
+            Guard.NotNull(data, nameof(data));
+
             var node = new ListNode<T>(data);
 
             if (ReferenceEquals(Head, null))
@@ -154,6 +157,8 @@ namespace StudentApp.List
 
         public void PushToStart(T data)
         {
+            Guard.NotNull(data, nameof(data));
+
             var node = new ListNode<T>(data);
 
             if (ReferenceEquals(Head, null))
