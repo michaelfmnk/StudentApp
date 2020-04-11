@@ -43,7 +43,11 @@ namespace StudentApp.List
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return (IEnumerator<T>) GetEnumerator();
+            var enumerator = GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                yield return (T) enumerator.Current;
+            }
         }
 
         public IEnumerator GetEnumerator()
