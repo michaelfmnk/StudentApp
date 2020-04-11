@@ -37,5 +37,17 @@ namespace StudentAppTest
             Assert.AreEqual("F3", clone.Current.FirstName);
             Assert.False(ReferenceEquals(student3, clone.Current));
         }
+
+        [Test]
+        public void ShouldCompareCorrectly()
+        {
+            var aList = new NamedCustomLinkedList<Student>("A");
+            var bList = new NamedCustomLinkedList<Student>("B");
+            
+            Assert.AreEqual(-1, aList.CompareTo(bList));
+            Assert.AreEqual(1, bList.CompareTo(aList));
+            Assert.AreEqual(0, aList.CompareTo(aList));
+            Assert.AreEqual(0, bList.CompareTo(bList));
+        }
     }
 }
