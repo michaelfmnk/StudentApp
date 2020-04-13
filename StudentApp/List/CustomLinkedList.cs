@@ -111,7 +111,7 @@ namespace StudentApp.List
             return second;
         }
 
-        private ListNode<T> Split(ListNode<T> head)
+        private static ListNode<T> Split(ListNode<T> head)
         {
             var fast = head;
             var slow = head;

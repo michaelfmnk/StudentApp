@@ -299,6 +299,37 @@ namespace StudentAppTest
         }
 
         [Test]
+        public void ShouldDeleteOnlyFirst()
+        {
+            // given
+            var linkedList = new CustomLinkedList<string>();
+
+            linkedList.AddAll("A", "B", "C", "A");
+            
+            // when
+            linkedList.DeleteFirst("A");
+            
+            
+            // then
+            Assert.AreEqual("B->C->A->", linkedList.ToString());
+        }
+        
+        [Test]
+        public void ShouldDeleteOnlyLast()
+        {
+            // given
+            var linkedList = new CustomLinkedList<string>();
+
+            linkedList.AddAll("A", "B", "C", "A");
+            
+            // when
+            linkedList.DeleteLast("A");
+            
+            // then
+            Assert.AreEqual("A->B->C->", linkedList.ToString());
+        }
+
+        [Test]
         public void ShouldClone()
         {
             // given
