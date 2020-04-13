@@ -11,7 +11,6 @@ namespace StudentApp.List
     {
         protected ListNode<T> CurrentNode;
         protected ListNode<T> Head;
-        protected ListNode<T> Tail => Head?.PrevNode;
 
         public CustomLinkedList()
         {
@@ -20,7 +19,7 @@ namespace StudentApp.List
         public CustomLinkedList(CustomLinkedList<T> source)
         {
             Guard.NotNull(source, nameof(source));
-            
+
             var node = source.Head;
 
             for (var i = 0; i < source.Size; i++)
@@ -34,6 +33,8 @@ namespace StudentApp.List
             }
         }
 
+        protected ListNode<T> Tail => Head?.PrevNode;
+
         public int Size { get; protected set; }
 
         public T Current => ReferenceEquals(null, CurrentNode) ? default : CurrentNode.Data;
@@ -43,13 +44,16 @@ namespace StudentApp.List
             return new CustomLinkedList<T>(this);
         }
 
+        public int CompareTo(CustomLinkedList<T> other)
+        {
+            if (ReferenceEquals(other, null)) return -1;
+            return other.Size - Size;
+        }
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             var enumerator = GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                yield return (T) enumerator.Current;
-            }
+            while (enumerator.MoveNext()) yield return (T) enumerator.Current;
         }
 
         public IEnumerator GetEnumerator()
@@ -64,32 +68,65 @@ namespace StudentApp.List
 
         public void Sort()
         {
-            var aNode = Head;
-            for (var i = 0; i < Size; i++)
-            {
-                var bNode = Tail;
-                for (var j = 0; j < Size - i; j++)
-                {
-                    if (aNode.Data.CompareTo(bNode.Data) > 0) SwapNodes(aNode, bNode);
+            Tail.NextNode = null;
+            Head.PrevNode = null;
+            Head = MergeSort(Head);
 
-                    bNode = bNode.PrevNode;
-                }
+            var tail = Head;
+            while (!ReferenceEquals(tail.NextNode, null)) tail = tail.NextNode;
 
-                aNode = aNode.NextNode;
-            }
+            Head.PrevNode = tail;
+            tail.NextNode = Head;
         }
 
-        private void SwapNodes(ListNode<T> aNode, ListNode<T> bNode)
+        private ListNode<T> MergeSort(ListNode<T> node)
         {
-            var tmp = aNode.Data;
-            aNode.Data = bNode.Data;
-            bNode.Data = tmp;
+            if (ReferenceEquals(node.NextNode, null)) return node;
 
-            if (ReferenceEquals(CurrentNode, aNode)) CurrentNode = bNode;
+            var second = Split(node);
 
-            if (ReferenceEquals(CurrentNode, bNode)) CurrentNode = bNode;
+            node = MergeSort(node);
+            second = MergeSort(second);
+
+            return Merge(node, second);
         }
 
+        private ListNode<T> Merge(ListNode<T> first, ListNode<T> second)
+        {
+            if (ReferenceEquals(first, null)) return second;
+
+            if (ReferenceEquals(second, null)) return first;
+
+            if (first.Data.CompareTo(second.Data) < 0)
+            {
+                first.NextNode = Merge(first.NextNode, second);
+                first.NextNode.PrevNode = first;
+                first.PrevNode = null;
+                return first;
+            }
+
+            second.NextNode = Merge(first, second.NextNode);
+            second.NextNode.PrevNode = second;
+            second.PrevNode = null;
+            return second;
+        }
+
+        private ListNode<T> Split(ListNode<T> head)
+        {
+            var fast = head;
+            var slow = head;
+
+            while (!ReferenceEquals(fast?.NextNode?.NextNode, null))
+            {
+                fast = fast.NextNode.NextNode;
+                slow = slow.NextNode;
+            }
+
+            var temp = slow.NextNode;
+            slow.NextNode = null;
+            return temp;
+        }
+        
         public void DeleteCurrent()
         {
             if (ReferenceEquals(CurrentNode, null)) return;
@@ -220,12 +257,6 @@ namespace StudentApp.List
             return node;
         }
 
-        public int CompareTo(CustomLinkedList<T> other)
-        {
-            if (ReferenceEquals(other, null)) return -1;
-            return other.Size - Size;
-        }
-
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
@@ -285,11 +316,11 @@ namespace StudentApp.List
                     DeleteNode(node);
                     return;
                 }
-                
+
                 node = node.NextNode;
             }
         }
-        
+
         public void DeleteLast(T data)
         {
             var node = Tail;
@@ -301,7 +332,7 @@ namespace StudentApp.List
                     DeleteNode(node);
                     return;
                 }
-                
+
                 node = node.PrevNode;
             }
         }
@@ -312,16 +343,13 @@ namespace StudentApp.List
             DeleteNode(CurrentNode);
             CurrentNode = node;
         }
-        
+
         private ListNode<T> AddSort(T data)
         {
             var node = Tail;
             for (var i = 0; i < Size; i++)
             {
-                if (data.CompareTo(node.Data) > 0)
-                {
-                    break;
-                }
+                if (data.CompareTo(node.Data) > 0) break;
 
                 node = node.PrevNode;
             }
@@ -332,10 +360,10 @@ namespace StudentApp.List
             next.PrevNode = newNode;
             newNode.NextNode = next;
 
-            
+
             newNode.PrevNode = node;
             node.NextNode = newNode;
-            
+
             return newNode;
         }
 
@@ -346,7 +374,7 @@ namespace StudentApp.List
                 Data = data;
             }
 
-            public TR Data { get; protected internal set; }
+            public TR Data { get; }
 
             protected internal ListNode<TR> NextNode { get; set; }
             protected internal ListNode<TR> PrevNode { get; set; }

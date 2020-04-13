@@ -213,7 +213,7 @@ namespace StudentAppTest
             // then
             Assert.AreEqual("F3", linkedList.Current.FirstName);
         }
-        
+
         [Test]
         public void ShouldNotCloneNull()
         {
@@ -458,7 +458,6 @@ namespace StudentAppTest
             Console.WriteLine(linkedList);
             for (var letter = 'A'; letter <= 'Z'; letter++)
             {
-
                 Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
                 linkedList++;
             }
@@ -494,7 +493,7 @@ namespace StudentAppTest
             var b = new CustomLinkedList<Student>();
 
             a.PushToEnd(StudentWithFirstName("H"));
-            
+
             Assert.AreEqual(-1, a.CompareTo(b));
         }
     }

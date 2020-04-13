@@ -1,5 +1,4 @@
 using System;
-using StudentApp.Common;
 
 namespace StudentApp.List
 {
@@ -29,7 +28,7 @@ namespace StudentApp.List
         {
             return new NamedCustomLinkedList<T>(this);
         }
-        
+
         public static bool operator >(NamedCustomLinkedList<T> aList, NamedCustomLinkedList<T> bList)
         {
             return string.CompareOrdinal(aList?.Name, bList?.Name) < 0;
@@ -39,7 +38,7 @@ namespace StudentApp.List
         {
             return string.CompareOrdinal(aList?.Name, bList?.Name) > 0;
         }
-        
+
         public static bool operator >=(NamedCustomLinkedList<T> aList, NamedCustomLinkedList<T> bList)
         {
             return string.CompareOrdinal(aList?.Name, bList?.Name) <= 0;
