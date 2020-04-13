@@ -213,6 +213,12 @@ namespace StudentAppTest
             // then
             Assert.AreEqual("F3", linkedList.Current.FirstName);
         }
+        
+        [Test]
+        public void ShouldNotCloneNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new CustomLinkedList<Student>(null));
+        }
 
         [Test]
         public void ExclamationMarkShouldCheckIfNotEmpty()
