@@ -6,12 +6,12 @@ using StudentApp.Common;
 
 namespace StudentApp.List
 {
-    public class CustomLinkedList<T> : ICloneable, IEnumerable<T>
+    public class CustomLinkedList<T> : ICloneable, IEnumerable<T>, IComparable<CustomLinkedList<T>>
         where T : IComparable<T>, ICloneable
     {
         protected ListNode<T> CurrentNode;
         protected ListNode<T> Head;
-        protected ListNode<T> Tail;
+        protected ListNode<T> Tail => Head?.PrevNode;
 
         public CustomLinkedList()
         {
@@ -19,6 +19,8 @@ namespace StudentApp.List
 
         public CustomLinkedList(CustomLinkedList<T> source)
         {
+            Guard.NotNull(source, nameof(source));
+            
             var node = source.Head;
 
             for (var i = 0; i < source.Size; i++)
@@ -104,6 +106,7 @@ namespace StudentApp.List
             Size -= 1;
 
             if (ReferenceEquals(node, CurrentNode)) CurrentNode = next;
+            if (ReferenceEquals(node, Head)) Head = next;
         }
 
         public void MoveToHead()
@@ -118,12 +121,14 @@ namespace StudentApp.List
 
         public static CustomLinkedList<T> operator ++(CustomLinkedList<T> list)
         {
+            if (ReferenceEquals(list.CurrentNode, null)) return list;
             list.CurrentNode = list.CurrentNode.NextNode;
             return list;
         }
 
         public static CustomLinkedList<T> operator --(CustomLinkedList<T> list)
         {
+            if (ReferenceEquals(list.CurrentNode, null)) return list;
             list.CurrentNode = list.CurrentNode.PrevNode;
             return list;
         }
@@ -150,7 +155,6 @@ namespace StudentApp.List
             node.NextNode = Head;
             Head.PrevNode = node;
 
-            Tail = node;
             Size += 1;
         }
 
@@ -171,10 +175,10 @@ namespace StudentApp.List
                 return;
             }
 
-            Head.PrevNode = node;
             node.NextNode = Head;
             node.PrevNode = Tail;
             Tail.NextNode = node;
+            Head.PrevNode = node;
 
             Head = node;
             Size += 1;
@@ -186,20 +190,19 @@ namespace StudentApp.List
             node.PrevNode = node;
 
             Head = node;
-            Tail = node;
 
             Size = 1;
             CurrentNode = Head;
         }
 
-        public T Get(int index)
+        public T Get(uint index)
         {
             return GetNode(index).Data;
         }
 
-        private ListNode<T> GetNode(int index)
+        private ListNode<T> GetNode(uint index)
         {
-            if (index < 0 || index >= Size) throw new IndexOutOfRangeException();
+            if (index >= Size) throw new IndexOutOfRangeException();
             ListNode<T> node;
 
 
@@ -215,6 +218,12 @@ namespace StudentApp.List
             }
 
             return node;
+        }
+
+        public int CompareTo(CustomLinkedList<T> other)
+        {
+            if (ReferenceEquals(other, null)) return -1;
+            return other.Size - Size;
         }
 
         public override string ToString()
@@ -233,12 +242,11 @@ namespace StudentApp.List
         public void Clear()
         {
             Head = null;
-            Tail = null;
             CurrentNode = null;
             Size = 0;
         }
 
-        public void Put(int index, T data)
+        public void Put(uint index, T data)
         {
             var currNode = index == Size ? Head : GetNode(index);
 
@@ -251,9 +259,7 @@ namespace StudentApp.List
             currNode.PrevNode = node;
 
             Size += 1;
-
             if (index == 0) Head = node;
-            if (index == Size) Tail = node;
         }
 
         public void Delete(T data)
@@ -268,19 +274,69 @@ namespace StudentApp.List
             }
         }
 
+        public void DeleteFirst(T data)
+        {
+            var node = Head;
+            var sizeBeforeDeletion = Size;
+            for (var i = 0; i < sizeBeforeDeletion; i++)
+            {
+                if (Equals(node.Data, data))
+                {
+                    DeleteNode(node);
+                    return;
+                }
+                
+                node = node.NextNode;
+            }
+        }
+        
+        public void DeleteLast(T data)
+        {
+            var node = Tail;
+            var sizeBeforeDeletion = Size;
+            for (var i = 0; i < sizeBeforeDeletion; i++)
+            {
+                if (Equals(node.Data, data))
+                {
+                    DeleteNode(node);
+                    return;
+                }
+                
+                node = node.PrevNode;
+            }
+        }
+
         public void SortCurrent()
         {
-            if (!ReferenceEquals(CurrentNode, Head) && CurrentNode.Data.CompareTo(CurrentNode.PrevNode.Data) < 0)
+            var node = AddSort(Current);
+            DeleteNode(CurrentNode);
+            CurrentNode = node;
+        }
+        
+        private ListNode<T> AddSort(T data)
+        {
+            var node = Tail;
+            for (var i = 0; i < Size; i++)
             {
-                SwapNodes(CurrentNode, CurrentNode.PrevNode);
-                SortCurrent();
+                if (data.CompareTo(node.Data) > 0)
+                {
+                    break;
+                }
+
+                node = node.PrevNode;
             }
 
-            if (!ReferenceEquals(CurrentNode, Tail) && CurrentNode.Data.CompareTo(CurrentNode.NextNode.Data) > 0)
-            {
-                SwapNodes(CurrentNode, CurrentNode.NextNode);
-                SortCurrent();
-            }
+            var newNode = new ListNode<T>(data);
+
+            var next = node.NextNode;
+            next.PrevNode = newNode;
+            newNode.NextNode = next;
+
+            
+            newNode.PrevNode = node;
+            node.NextNode = newNode;
+            
+            return newNode;
         }
 
         protected internal sealed class ListNode<TR>

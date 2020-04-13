@@ -59,7 +59,6 @@ namespace StudentAppTest
 
             Assert.Throws<IndexOutOfRangeException>(() => { linkedList.Get(0); });
             Assert.Throws<IndexOutOfRangeException>(() => { linkedList.Get(100); });
-            Assert.Throws<IndexOutOfRangeException>(() => { linkedList.Get(-1); });
         }
 
         [Test]
@@ -277,15 +276,14 @@ namespace StudentAppTest
             var student2 = new Student("F2", "L", "N", 1999);
             var student3 = new Student("F3", "L", "N", 1999);
 
-            linkedList.PushToEnd(student1);
-            linkedList.PushToEnd(student2);
-            linkedList.PushToEnd(student3);
+            linkedList.AddAll(student1, student2, student3);
             linkedList.MoveToHead();
             linkedList++;
 
             // when
             linkedList.DeleteCurrent();
 
+            Console.WriteLine(linkedList.GetEnumerator().GetType());
 
             // then
             Assert.AreEqual("F3", linkedList.Current.FirstName);
@@ -454,6 +452,7 @@ namespace StudentAppTest
             Console.WriteLine(linkedList);
             for (var letter = 'A'; letter <= 'Z'; letter++)
             {
+
                 Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
                 linkedList++;
             }
@@ -465,6 +464,32 @@ namespace StudentAppTest
             var linkedList = new CustomLinkedList<Student>();
 
             Assert.Throws<ArgumentNullException>(() => linkedList.PushToEnd(null));
+        }
+
+        [Test]
+        public void ShouldNotThrowNpeIncrementingCurrent()
+        {
+            var list = new CustomLinkedList<Student>();
+            list++;
+            list--;
+            Assert.Null(list.Current);
+        }
+
+        [Test]
+        public void ShouldThrowIndexOutOfRangeException()
+        {
+            Assert.Throws<IndexOutOfRangeException>(() => new CustomLinkedList<Student>().Get(0));
+        }
+
+        [Test]
+        public void ShouldCompareBySize()
+        {
+            var a = new CustomLinkedList<Student>();
+            var b = new CustomLinkedList<Student>();
+
+            a.PushToEnd(StudentWithFirstName("H"));
+            
+            Assert.AreEqual(-1, a.CompareTo(b));
         }
     }
 }

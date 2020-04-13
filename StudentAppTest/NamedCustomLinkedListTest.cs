@@ -13,6 +13,39 @@ namespace StudentAppTest
 
             Assert.AreEqual("Custom Name", namedList.Name);
         }
+        
+        [Test]
+        public void ShouldCompareByName()
+        {
+            var aList = new NamedCustomLinkedList<Student>("A");
+            var bList = new NamedCustomLinkedList<Student>("B");
+            
+            Assert.True(aList > bList);
+            Assert.True(bList < aList);
+            Assert.True(aList >= bList);
+            Assert.True(bList <= aList);
+            
+            Assert.False(aList < bList);
+            Assert.False(bList > aList);
+            Assert.False(aList <= bList);
+            Assert.False(bList >= aList);
+        }
+        
+        [Test]
+        public void ShouldCompareWithNull()
+        {
+            var aList = new NamedCustomLinkedList<Student>("A");
+            
+            Assert.True(aList < null);
+            Assert.True(null > aList);
+            Assert.True(aList <= null);
+            Assert.True(null >= aList);
+            
+            Assert.False(null < aList);
+            Assert.False(aList > null);
+            Assert.False(null <= aList);
+            Assert.False(aList >= null);
+        }
 
         [Test]
         public void CloningShouldWork()

@@ -1,4 +1,5 @@
 using System;
+using StudentApp.Common;
 
 namespace StudentApp.List
 {
@@ -27,6 +28,26 @@ namespace StudentApp.List
         public override object Clone()
         {
             return new NamedCustomLinkedList<T>(this);
+        }
+        
+        public static bool operator >(NamedCustomLinkedList<T> aList, NamedCustomLinkedList<T> bList)
+        {
+            return string.CompareOrdinal(aList?.Name, bList?.Name) < 0;
+        }
+
+        public static bool operator <(NamedCustomLinkedList<T> aList, NamedCustomLinkedList<T> bList)
+        {
+            return string.CompareOrdinal(aList?.Name, bList?.Name) > 0;
+        }
+        
+        public static bool operator >=(NamedCustomLinkedList<T> aList, NamedCustomLinkedList<T> bList)
+        {
+            return string.CompareOrdinal(aList?.Name, bList?.Name) <= 0;
+        }
+
+        public static bool operator <=(NamedCustomLinkedList<T> aList, NamedCustomLinkedList<T> bList)
+        {
+            return string.CompareOrdinal(aList?.Name, bList?.Name) >= 0;
         }
     }
 }
