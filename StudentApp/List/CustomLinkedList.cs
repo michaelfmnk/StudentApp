@@ -50,13 +50,7 @@ namespace StudentApp.List
             return other.Size - Size;
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            var enumerator = GetEnumerator();
-            while (enumerator.MoveNext()) yield return (T) enumerator.Current;
-        }
-
-        public IEnumerator GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             var node = Head;
             for (var i = 0; i < Size; i++)
@@ -65,7 +59,12 @@ namespace StudentApp.List
                 node = node.NextNode;
             }
         }
-
+        
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        
         public void Sort()
         {
             Tail.NextNode = null;
