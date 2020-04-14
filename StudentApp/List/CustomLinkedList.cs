@@ -75,7 +75,7 @@ namespace StudentApp.List
             return GetEnumerator();
         }
 
-        
+
         public void Sort()
         {
             if (Size < 2) return;
@@ -91,54 +91,75 @@ namespace StudentApp.List
             tail.NextNode = Head;
         }
 
-        private ListNode<T> MergeSort(ListNode<T> node)
+        private static ListNode<T> MergeSort(ListNode<T> head)
         {
-            if (ReferenceEquals(node.NextNode, null)) return node;
+            int listSize = 1, numMerges;
+            if (ReferenceEquals(head?.NextNode, null)) return head;
 
-            var second = Split(node);
-
-            node = MergeSort(node);
-            second = MergeSort(second);
-
-            return Merge(node, second);
-        }
-
-        private ListNode<T> Merge(ListNode<T> first, ListNode<T> second)
-        {
-            if (ReferenceEquals(first, null)) return second;
-
-            if (ReferenceEquals(second, null)) return first;
-
-            if (first.Data.CompareTo(second.Data) < 0)
+            do
             {
-                first.NextNode = Merge(first.NextNode, second);
-                first.NextNode.PrevNode = first;
-                first.PrevNode = null;
-                return first;
-            }
+                numMerges = 0;
+                var left = head;
+                var tail = head = null;
 
-            second.NextNode = Merge(first, second.NextNode);
-            second.NextNode.PrevNode = second;
-            second.PrevNode = null;
-            return second;
+                while (!ReferenceEquals(left, null))
+                {
+                    numMerges++;
+                    var right = left;
+                    var leftSize = 0;
+                    var rightSize = listSize;
+
+                    while (!ReferenceEquals(right, null) && leftSize < listSize)
+                    {
+                        leftSize++;
+                        right = right.NextNode;
+                    }
+
+                    while (leftSize > 0 || rightSize > 0 && !ReferenceEquals(right, null))
+                    {
+                        ListNode<T> next;
+                        if (leftSize == 0)
+                        {
+                            next = right;
+                            right = right.NextNode;
+                            rightSize--;
+                        }
+                        else if (rightSize == 0 || ReferenceEquals(right, null))
+                        {
+                            next = left;
+                            left = left.NextNode;
+                            leftSize--;
+                        }
+                        else if (left.Data.CompareTo(right.Data) < 0)
+                        {
+                            next = left;
+                            left = left.NextNode;
+                            leftSize--;
+                        }
+                        else
+                        {
+                            next = right;
+                            right = right.NextNode;
+                            rightSize--;
+                        }
+
+                        if (!ReferenceEquals(tail, null)) tail.NextNode = next;
+                        else head = next;
+
+                        next.PrevNode = tail;
+                        tail = next;
+                    }
+
+                    left = right;
+                }
+
+                tail.NextNode = null;
+                listSize <<= 1;
+            } while (numMerges > 1);
+
+            return head;
         }
-
-        private static ListNode<T> Split(ListNode<T> head)
-        {
-            var fast = head;
-            var slow = head;
-
-            while (!ReferenceEquals(fast?.NextNode?.NextNode, null))
-            {
-                fast = fast.NextNode.NextNode;
-                slow = slow.NextNode;
-            }
-
-            var temp = slow.NextNode;
-            slow.NextNode = null;
-            return temp;
-        }
-
+        
         public void DeleteCurrent()
         {
             if (ReferenceEquals(CurrentNode, null)) return;

@@ -423,23 +423,24 @@ namespace StudentAppTest
         public void ShouldSort()
         {
             // given
-            var linkedList = new CustomLinkedList<Student>();
+            var linkedList = new CustomLinkedList<string>();
 
             for (var letter = 'Z'; letter >= 'A'; letter--)
-                linkedList.PushToEnd(StudentWithFirstName(letter.ToString()));
+                linkedList.PushToEnd(letter.ToString());
 
 
             // when
             linkedList.Sort();
+            Console.WriteLine(linkedList);
 
             // then
-            Assert.AreEqual("Z", linkedList.Current.FirstName);
+            Assert.AreEqual("Z", linkedList.Current);
 
             linkedList.MoveToHead();
 
             for (var letter = 'A'; letter <= 'Z'; letter++)
             {
-                Assert.AreEqual(letter.ToString(), linkedList.Current.FirstName);
+                Assert.AreEqual(letter.ToString(), linkedList.Current);
                 linkedList++;
             }
         }
@@ -561,7 +562,7 @@ namespace StudentAppTest
             // given
             var list = new CustomLinkedList<Student>();
 
-            for (var i = 0; i < 4_500; i++)
+            for (var i = 0; i < 100_000; i++)
             {
                 list.PushToEnd(StudentWithFirstName("A"));
             }
