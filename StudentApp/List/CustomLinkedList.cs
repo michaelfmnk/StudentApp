@@ -7,7 +7,7 @@ using StudentApp.Common;
 namespace StudentApp.List
 {
     public class CustomLinkedList<T> : ICloneable, IEnumerable<T>, IComparable<CustomLinkedList<T>>
-        where T : IComparable<T>, ICloneable
+        where T : IComparable<T>
     {
         protected ListNode<T> CurrentNode;
         protected ListNode<T> Head;
@@ -24,13 +24,23 @@ namespace StudentApp.List
 
             for (var i = 0; i < source.Size; i++)
             {
-                var clonedData = (T) node.Data.Clone();
+                var clonedData = Clone(node.Data);
                 PushToEnd(clonedData);
 
                 if (ReferenceEquals(node, source.CurrentNode)) MoveToTail();
 
                 node = node.NextNode;
             }
+        }
+
+        private static T Clone(T data)
+        {
+            if (typeof(T).IsValueType)
+            {
+                return data;
+            }
+
+            return (T) ((ICloneable) data).Clone();
         }
 
         protected ListNode<T> Tail => Head?.PrevNode;
@@ -59,14 +69,17 @@ namespace StudentApp.List
                 node = node.NextNode;
             }
         }
-        
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
         
         public void Sort()
         {
+            if (Size < 2) return;
+
             Tail.NextNode = null;
             Head.PrevNode = null;
             Head = MergeSort(Head);
@@ -125,7 +138,7 @@ namespace StudentApp.List
             slow.NextNode = null;
             return temp;
         }
-        
+
         public void DeleteCurrent()
         {
             if (ReferenceEquals(CurrentNode, null)) return;

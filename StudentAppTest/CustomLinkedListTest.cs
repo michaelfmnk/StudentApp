@@ -299,21 +299,34 @@ namespace StudentAppTest
         }
 
         [Test]
+        public void ShouldSortEmpty()
+        {
+            // given
+            var linkedList = new CustomLinkedList<Student>();
+
+            // when
+            linkedList.Sort();
+
+            // then
+            Assert.Null(linkedList.Current);
+        }
+
+        [Test]
         public void ShouldDeleteOnlyFirst()
         {
             // given
             var linkedList = new CustomLinkedList<string>();
 
             linkedList.AddAll("A", "B", "C", "A");
-            
+
             // when
             linkedList.DeleteFirst("A");
-            
-            
+
+
             // then
             Assert.AreEqual("B->C->A->", linkedList.ToString());
         }
-        
+
         [Test]
         public void ShouldDeleteOnlyLast()
         {
@@ -321,10 +334,10 @@ namespace StudentAppTest
             var linkedList = new CustomLinkedList<string>();
 
             linkedList.AddAll("A", "B", "C", "A");
-            
+
             // when
             linkedList.DeleteLast("A");
-            
+
             // then
             Assert.AreEqual("A->B->C->", linkedList.ToString());
         }
@@ -526,6 +539,38 @@ namespace StudentAppTest
             a.PushToEnd(StudentWithFirstName("H"));
 
             Assert.AreEqual(-1, a.CompareTo(b));
+        }
+
+        [Test]
+        public void ShouldCloneValueTypes()
+        {
+            // given
+            var list = new CustomLinkedList<int>();
+            list.AddAll(1, 2, 3);
+            
+            // when
+            var clone = (CustomLinkedList<int>) list.Clone();
+
+            // then
+            Assert.AreEqual(clone.Size, list.Size);
+        }
+        
+        [Test]
+        public void SortShouldNotFailWithLargeLists()
+        {
+            // given
+            var list = new CustomLinkedList<Student>();
+
+            for (var i = 0; i < 4_500; i++)
+            {
+                list.PushToEnd(StudentWithFirstName("A"));
+            }
+            
+            // when
+            list.Sort();
+            
+            // then should not throw an exception
+            Assert.True(true);
         }
     }
 }
