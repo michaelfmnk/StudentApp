@@ -118,19 +118,7 @@ namespace StudentApp.List
                     while (leftSize > 0 || rightSize > 0 && !ReferenceEquals(right, null))
                     {
                         ListNode<T> next;
-                        if (leftSize == 0)
-                        {
-                            next = right;
-                            right = right.NextNode;
-                            rightSize--;
-                        }
-                        else if (rightSize == 0 || ReferenceEquals(right, null))
-                        {
-                            next = left;
-                            left = left.NextNode;
-                            leftSize--;
-                        }
-                        else if (left.Data.CompareTo(right.Data) < 0)
+                        if (rightSize == 0 || ReferenceEquals(right, null)  || left.Data.CompareTo(right.Data) < 0)
                         {
                             next = left;
                             left = left.NextNode;
